@@ -1,0 +1,51 @@
+﻿
+@model IEnumerable<EmployeeVacationDB.Models.Employee>
+@{
+    ViewData["Title"] = "Employee Vacation Tracker";
+}
+
+<h2>Employee Vacation Tracker</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div style="color:red">
+        @TempData["Error"]
+    </div>
+}
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <form asp-action="NewCalender" method="post" style="display:inline;">
+            <button type="submit">New Work Calender</button>
+        </form>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <th>Type of Employee</th>
+        <th>Total Days Worked</th>
+        <th>Vacation Days Accumulated</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.Name</td>
+            <td>@emp.GetType().Name</td>
+            <td>@emp.TotalDaysWorked</td>
+            <td>@emp.VacationDaysAccumulated</td>
+            <td>
+                <form asp-action="Work" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@emp.Id" />
+                    <input type="number" name="days" placeholder="Work Days" min="0" max="260" />
+                    <button type="submit">Work</button>
+                </form>
+
+                <form asp-action="TakeVacation" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@emp.Id" />
+                    <input type="number" step="0.5" name="days" placeholder="Vacation Days" min="0" />
+                    <button type="submit">Vacation</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
